@@ -2,4 +2,8 @@ npm init -y
 npm i -g npm
 npm i jest --save-dev
 
-hol
+
+
+
+    // Shourt cut for same name values
+    const block = new Block({ timestamp, lastHash, hash, data });
