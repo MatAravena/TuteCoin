@@ -26,8 +26,6 @@ describe("Block", () => {
     describe("genesis()", () => {
         const genesisBlock = Block.genesis();
 
-        console.log('genesisBlock', genesisBlock);
-
         it("returns a Block isntance", () => {
             expect(genesisBlock instanceof Block).toEqual(true);
         });
@@ -39,7 +37,7 @@ describe("Block", () => {
 
     describe("mineBlock", () => {
         const lastBlock = Block.genesis();
-        const data = "mined data ";
+        const data = "mined data";
         const minedBlock = Block.mineBlock({ lastBlock, data });
 
         it("returns a Block instance", () => {
@@ -57,8 +55,7 @@ describe("Block", () => {
         });
 
         it("creates a SHA256 'hash' based on the proper inputs", () => {
-            expect(minedBlock.hash)
-                .toEqual(cryptoHash(minedBlock.timeStamp, lastBlock, data));
+            expect(minedBlock.hash).toEqual(cryptoHash(minedBlock.timestamp, lastBlock.hash, data));
         });
 
     });
