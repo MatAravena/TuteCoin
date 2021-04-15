@@ -37,7 +37,7 @@ describe("BlockChain", () => {
             });
         });
 
-        describe("When th chain starts with the genesis block and has multiple blokcs", () => {
+        describe("When the chain starts with the genesis block and has multiple blokcs", () => {
             beforeEach(() => {
                 blockchain.addBlock({ data: "Nose 1" });
                 blockchain.addBlock({ data: "Nose 2" });
@@ -127,7 +127,7 @@ describe("BlockChain", () => {
                     expect(blockchain.chain).toEqual(newChain.chain);
                 });
 
-                it("logs about the chain replacement", () => {
+                it('logs about the chain replacement', () => {
                     expect(logMock).toHaveBeenCalled();
                 });
             });

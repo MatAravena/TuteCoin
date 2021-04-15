@@ -21,12 +21,12 @@ class BlockChain {
             return false;
 
         for (let i = 1; i < chain.length - 1; i++) {
-            const { timestamp, lastHash, hash, data } = chain[i];
+            const { timestamp, lastHash, hash, nonce, difficulty, data } = chain[i];
             const actualLastHash = chain[i - 1].hash;
 
             if (lastHash !== actualLastHash) return false;
 
-            const validatedHash = cryptoHash(timestamp, lastHash, data);
+            const validatedHash = cryptoHash(timestamp, lastHash, data, nonce, difficulty);
 
             if (hash !== validatedHash) return false;
         }
@@ -44,6 +44,7 @@ class BlockChain {
             return;
         }
 
+        console.log("Que sucede ?", chain);
         console.log("replaciong chain with", chain);
         this.chain = chain;
     }

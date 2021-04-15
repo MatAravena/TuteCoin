@@ -1,10 +1,14 @@
-const cryptoHash = require('./crypto-hash');
+//const cryptoHash = require('./crypto-hash');
+const INITIAL_DIFFICULTY = 1;
+const MINE_RATE = 1000;
 
 const GENESIS_DATA = {
     timestamp: new Date(),
     lastHash: "-----",
-    hash: cryptoHash("hashPrimero"),
-    data: [cryptoHash("Primer Tute Coin !")]
+    hash: "hashPrimero",
+    difficulty: INITIAL_DIFFICULTY,
+    nonce: 0,
+    data: ["Primer Tute Coin !"]
 };
 
-module.exports = { GENESIS_DATA };
+module.exports = { GENESIS_DATA, MINE_RATE };
