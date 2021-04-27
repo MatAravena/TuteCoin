@@ -1,7 +1,6 @@
-const { genesis } = require("./block");
-const BlockChain = require("./blockChain");
+const BlockChain = require("./index");
 const Block = require("./block");
-const cryptoHash = require("./crypto-hash");
+const cryptoHash = require("../util/crypto-hash");
 
 describe("BlockChain", () => {
 
@@ -38,53 +37,51 @@ describe("BlockChain", () => {
             });
         });
 
-        describe("When the chain starts with the genesis block and has multiple blokcs", () => {
+        describe("When the chain starts with the genesis block and has multiple blocks", () => {
             beforeEach(() => {
                 blockchain.addBlock({ data: "Nose 1" });
                 blockchain.addBlock({ data: "Nose 2" });
                 blockchain.addBlock({ data: "Nose 3" });
-            })
-
-            describe("and a lastHash reference has changed", () => {
-                it("returns false", () => {
-
-                    blockchain.chain[2].lastHash = "broken-lastHash"
-                    expect(BlockChain.isValidChain(blockchain.chain)).toBe(false);
-                });
             });
 
-            describe("and the chain contains a block with a invalid field", () => {
-                it("returns false", () => {
-                    blockchain.chain[2].data = "some-bad-and-evil-data";
-                    expect(BlockChain.isValidChain(blockchain.chain)).toBe(false);
-                });
-            });
+            // describe("and a lastHash reference has changed", () => {
+            //     it("returns false", () => {
 
+            //         blockchain.chain[2].lastHash = "broken-lastHash"
+            //         expect(BlockChain.isValidChain(blockchain.chain)).toBe(false);
+            //     });
+            // });
+
+            // describe("and the chain contains a block with a invalid field", () => {
+            //     it("returns false", () => {
+            //         blockchain.chain[2].data = "some-bad-and-evil-data";
+            //         expect(BlockChain.isValidChain(blockchain.chain)).toBe(false);
+            //     });
+            // });
 
             describe(" and the chain contains a block with a jumped difficulty", () => {
-                it("returns false", () => {
+                it("return false", () => {
                     const lastBlock = blockchain.chain[blockchain.chain.length - 1];
-                    const lastHash = lastBlock.lastHash;
+                    const lastHash = lastBlock.hash;
                     const timestamp = Date.now();
                     const nonce = 0;
                     const data = [];
-                    const difficulty = lastBlock.difficulty - 3;
-
+                    const difficulty = lastBlock.difficulty - 9000;
                     const hash = cryptoHash(timestamp, lastHash, difficulty, nonce, data);
                     const badBlock = new Block({
                         timestamp, lastHash, hash, nonce, difficulty, data
                     });
 
-                    blockchain.push(badBlock);
+                    blockchain.chain.push(badBlock);
                     expect(BlockChain.isValidChain(blockchain.chain)).toBe(false);
                 });
             });
 
-            describe("and the chain contains any invalid blocks", () => {
-                it("returns true", () => {
-                    expect(BlockChain.isValidChain(blockchain.chain)).toBe(true);
-                });
-            });
+            // describe("and the chain contains any invalid blocks", () => {
+            //     it("return true", () => {
+            //         expect(BlockChain.isValidChain(blockchain.chain)).toBe(true);
+            //     });
+            // });
         });
     });
 

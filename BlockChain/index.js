@@ -1,7 +1,8 @@
 const Block = require("./block");
-const cryptoHash = require("./crypto-hash");
+const cryptoHash = require("../util/crypto-hash");
 
 class BlockChain {
+
     constructor() {
         this.chain = [Block.genesis()];
     }
@@ -11,16 +12,16 @@ class BlockChain {
             lastBlock: this.chain[this.chain.length - 1],
             data
         });
-
         this.chain.push(newBlock);
-
     }
 
     static isValidChain(chain) {
         if (JSON.stringify(chain[0]) !== JSON.stringify(Block.genesis()))
             return false;
 
-        for (let i = 1; i < chain.length - 1; i++) {
+        console.log("Leght chain", chain.length);
+        for (let i = 1; i < chain.length; i++) {
+            console.log("Indice", i);
             const { timestamp, lastHash, hash, nonce, difficulty, data } = chain[i];
             const actualLastHash = chain[i - 1].hash;
             const lastDiff = chain[i - 1].difficulty;
