@@ -19,9 +19,7 @@ class BlockChain {
         if (JSON.stringify(chain[0]) !== JSON.stringify(Block.genesis()))
             return false;
 
-        console.log("Leght chain", chain.length);
         for (let i = 1; i < chain.length; i++) {
-            console.log("Indice", i);
             const { timestamp, lastHash, hash, nonce, difficulty, data } = chain[i];
             const actualLastHash = chain[i - 1].hash;
             const lastDiff = chain[i - 1].difficulty;

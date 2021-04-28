@@ -44,20 +44,20 @@ describe("BlockChain", () => {
                 blockchain.addBlock({ data: "Nose 3" });
             });
 
-            // describe("and a lastHash reference has changed", () => {
-            //     it("returns false", () => {
+            describe("and a lastHash reference has changed", () => {
+                it("returns false", () => {
 
-            //         blockchain.chain[2].lastHash = "broken-lastHash"
-            //         expect(BlockChain.isValidChain(blockchain.chain)).toBe(false);
-            //     });
-            // });
+                    blockchain.chain[2].lastHash = "broken-lastHash"
+                    expect(BlockChain.isValidChain(blockchain.chain)).toBe(false);
+                });
+            });
 
-            // describe("and the chain contains a block with a invalid field", () => {
-            //     it("returns false", () => {
-            //         blockchain.chain[2].data = "some-bad-and-evil-data";
-            //         expect(BlockChain.isValidChain(blockchain.chain)).toBe(false);
-            //     });
-            // });
+            describe("and the chain contains a block with a invalid field", () => {
+                it("returns false", () => {
+                    blockchain.chain[2].data = "some-bad-and-evil-data";
+                    expect(BlockChain.isValidChain(blockchain.chain)).toBe(false);
+                });
+            });
 
             describe(" and the chain contains a block with a jumped difficulty", () => {
                 it("return false", () => {
@@ -77,11 +77,11 @@ describe("BlockChain", () => {
                 });
             });
 
-            // describe("and the chain contains any invalid blocks", () => {
-            //     it("return true", () => {
-            //         expect(BlockChain.isValidChain(blockchain.chain)).toBe(true);
-            //     });
-            // });
+            describe("and the chain contains any invalid blocks", () => {
+                it("return true", () => {
+                    expect(BlockChain.isValidChain(blockchain.chain)).toBe(true);
+                });
+            });
         });
     });
 
