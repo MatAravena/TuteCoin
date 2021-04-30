@@ -1,4 +1,5 @@
 const { STARTING_BALANCE } = require("../config");
+const Transaction = require("./transaction");
 
 // Index queda como archivo defecto de directorio y se obvia en la llamada
 //const { ec } = require("../util/index");
@@ -18,6 +19,13 @@ class Wallet {
         // var signature = key.sign(msgHash);
 
         return this.keyPair.sign(cryptoHash(data));
+    }
+
+    createTransaction({ amount, recipient }) {
+        if (this.balance < amount)
+            throw new Error("Amount exceeds balance");
+
+        return new Transaction({ senderWallet: this, recipient, amount });
     }
 }
 

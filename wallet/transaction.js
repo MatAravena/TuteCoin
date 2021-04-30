@@ -21,8 +21,6 @@ class Transaction {
     }
 
     createInput({ senderWallet, outputMap }) {
-
-
         return {
             timestamp: Date.now,
             amount: senderWallet.balance,
