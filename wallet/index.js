@@ -1,15 +1,13 @@
 const { STARTING_BALANCE } = require("../config");
-const cryptoHash = require("../util/crypto-hash");
 
 // Index queda como archivo defecto de directorio y se obvia en la llamada
 //const { ec } = require("../util/index");
-const { ec } = require("../util");
+const { ec, cryptoHash } = require("../util");
 
 class Wallet {
 
     constructor() {
         this.balance = STARTING_BALANCE;
-
         this.keyPair = ec.genKeyPair();
         this.publicKey = this.keyPair.getPublic().encode("hex");
     }

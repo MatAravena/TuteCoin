@@ -11,7 +11,7 @@
     "start-redis": "redis-server --service-stop && redis-server --service-start"
   },
   "jest": {
-    "testEnvironment" :"node"
+    "testEnvironment": "node"
   },
   "keywords": [],
   "author": "",
@@ -29,6 +29,7 @@
     "express": "^4.17.1",
     "hex-to-binary": "^1.0.1",
     "pubnub": "^4.31.0",
-    "request": "^2.88.2"
+    "request": "^2.88.2",
+    "uuid": "^3.4.0"
   }
 }
