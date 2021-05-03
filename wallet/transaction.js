@@ -34,7 +34,7 @@ class Transaction {
         // const { input, outputMap } = transaction;
         // const { adress, amount, signature } = input;
 
-        // MEGA DESTRUCTION
+        // MEGA DESTRUCTION<<
         const { input: { address, amount, signature }, outputMap } = transaction;
 
         const outputTotal = Object.values(outputMap)
@@ -51,6 +51,22 @@ class Transaction {
         }
 
         return true;
+    }
+
+    update({ senderWallet, recipient, amount }) {
+        if (amount > this.outputMap[senderWallet.publicKey]) {
+            throw new Error("Amount exceeds the balance");
+        }
+
+        if (!this.outputMap[recipient])
+            this.outputMap[recipient] = amount;
+        else
+            this.outputMap[recipient] = this.outputMap[recipient] + amount
+
+        this.outputMap[senderWallet.publicKey] =
+            this.outputMap[senderWallet.publicKey] - amount;
+
+        this.input = this.createInput({ senderWallet, outputMap: this.outputMap });
     }
 }
 
