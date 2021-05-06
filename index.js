@@ -5,7 +5,7 @@ const express = require('express');
 //Request Http
 const request = require("request");
 
-const BlockChain = require("./BlockChain");
+const BlockChain = require("./blockchain");
 const PubSub = require("./app/pubsub");
 const TransactionPool = require("./wallet/transaction-pool");
 const Wallet = require("./wallet");

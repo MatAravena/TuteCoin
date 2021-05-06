@@ -1,14 +1,15 @@
 // return truly unique id
 const uuid = require("uuid/v1");
+const { REWARD_INPUT, MINNING_REWARD } = require("../config");
 const { verifySignature } = require("../util");
 
 class Transaction {
 
-    constructor({ senderWallet, recipient, amount }) {
+    constructor({ senderWallet, recipient, amount, outputMap, input }) {
         this.senderWallet = senderWallet;
         this.id = uuid();
-        this.outputMap = this.createOutputMap({ senderWallet, recipient, amount });
-        this.input = this.createInput({ senderWallet, outputMap: this.outputMap });
+        this.outputMap = outputMap || this.createOutputMap({ senderWallet, recipient, amount });
+        this.input = input || this.createInput({ senderWallet, outputMap: this.outputMap });
     }
 
     createOutputMap({ senderWallet, recipient, amount }) {
@@ -27,6 +28,22 @@ class Transaction {
             address: senderWallet.publicKey,
             signature: senderWallet.sign(outputMap)
         };
+    }
+
+    update({ senderWallet, recipient, amount }) {
+        if (amount > this.outputMap[senderWallet.publicKey]) {
+            throw new Error("Amount exceeds the balance");
+        }
+
+        if (!this.outputMap[recipient])
+            this.outputMap[recipient] = amount;
+        else
+            this.outputMap[recipient] = this.outputMap[recipient] + amount
+
+        this.outputMap[senderWallet.publicKey] =
+            this.outputMap[senderWallet.publicKey] - amount;
+
+        this.input = this.createInput({ senderWallet, outputMap: this.outputMap });
     }
 
     static validTransaction(transaction) {
@@ -53,20 +70,11 @@ class Transaction {
         return true;
     }
 
-    update({ senderWallet, recipient, amount }) {
-        if (amount > this.outputMap[senderWallet.publicKey]) {
-            throw new Error("Amount exceeds the balance");
-        }
-
-        if (!this.outputMap[recipient])
-            this.outputMap[recipient] = amount;
-        else
-            this.outputMap[recipient] = this.outputMap[recipient] + amount
-
-        this.outputMap[senderWallet.publicKey] =
-            this.outputMap[senderWallet.publicKey] - amount;
-
-        this.input = this.createInput({ senderWallet, outputMap: this.outputMap });
+    static rewardTransaction({ minerWallet }) {
+        return new this({
+            input: REWARD_INPUT,
+            outputMap: { [minerWallet.publicKey]: MINNING_REWARD }
+        });
     }
 }
 
