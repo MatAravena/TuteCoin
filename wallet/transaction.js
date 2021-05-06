@@ -34,7 +34,7 @@ class Transaction {
         // const { input, outputMap } = transaction;
         // const { adress, amount, signature } = input;
 
-        // MEGA DESTRUCTION<<
+        // MEGA DESTRUCTION
         const { input: { address, amount, signature }, outputMap } = transaction;
 
         const outputTotal = Object.values(outputMap)

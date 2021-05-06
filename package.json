@@ -7,7 +7,7 @@
     "test": "jest --watchAll",
     "start": "node index.js",
     "dev": "npm run start-redis && nodemon index.js",
-    "dev-peer": "cross-env GENERATE_PEER_PORT='true' nodemon index.js",
+    "dev-peer": "cross-env GENERATE_PEER_PORT='true' ENV='development' nodemon index.js",
     "start-redis": "redis-server --service-stop && redis-server --service-start"
   },
   "jest": {
