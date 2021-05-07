@@ -1,6 +1,8 @@
 const Wallet = require("./index");
 const { verifySignature } = require("../util");
 const Transaction = require("./transaction");
+const BlockChain = require("../blockchain");
+const { STARTING_BALANCE } = require("../config");
 
 describe("Wallet", () => {
     let wallet;
@@ -66,6 +68,76 @@ describe("Wallet", () => {
 
             it("outputs the amount to the recipient", () => {
                 expect(transaction.outputMap[recipient]).toEqual(amount);
+            });
+
+        });
+
+        describe("and a chain is passed", () => {
+            it("calls 'Wallet.calculatedBalance' ", () => {
+                const calculatedBalanceMock = jest.fn();
+                const originalCalculateBalance = Wallet.calculateBalance;
+
+                Wallet.calculateBalance = calculatedBalanceMock;
+
+                wallet.createTransaction({
+                    recipient: "prueba",
+                    amount: 10,
+                    chain: new BlockChain().chain
+                })
+
+                expect(calculatedBalanceMock).toHaveBeenCalled();
+
+                Wallet.calculateBalance = originalCalculateBalance;
+            });
+        });
+
+    });
+
+    describe("calculatedBalance()", () => {
+        let blockchain;
+
+        beforeEach(() => {
+            blockchain = new BlockChain();
+        })
+
+        describe("and there are no outputs for the wallet", () => {
+
+            it("returns the 'STARTING_BALANCE' ", () => {
+                expect(
+                    Wallet.calculateBalance({
+                        chain: blockchain.chain,
+                        address: wallet.publicKey
+                    })).toEqual(STARTING_BALANCE);
+            });
+        });
+
+        describe("and there are outputs for the wallet", () => {
+            let transOne, transTwo;
+
+            beforeEach(() => {
+                transOne = new Wallet().createTransaction({
+                    amount: 20,
+                    recipient: wallet.publicKey
+                });
+                transTwo = new Wallet().createTransaction({
+                    amount: 25,
+                    recipient: wallet.publicKey
+                });
+
+                blockchain.addBlock({ data: [transOne, transTwo] });
+            });
+
+            it("adds the sum all outputs to the wallet balance ", () => {
+
+                expect(
+                    Wallet.calculateBalance({
+                        chain: blockchain.chain,
+                        address: wallet.publicKey
+                    }))
+                    .toEqual(STARTING_BALANCE +
+                        transOne.outputMap[wallet.publicKey] +
+                        transTwo.outputMap[wallet.publicKey]);
+
             });
 
         });
