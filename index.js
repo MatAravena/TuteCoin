@@ -2,6 +2,7 @@ const bodyParser = require("body-parser");
 
 //ExpressJS
 const express = require('express');
+
 //Request Http
 const request = require("request");
 
@@ -9,17 +10,14 @@ const BlockChain = require("./blockchain");
 const PubSub = require("./app/pubsub");
 const TransactionPool = require("./wallet/transaction-pool");
 const Wallet = require("./wallet");
-const { response } = require("express");
+const TransactionMiner = require("./app/transaction-miner");
+const { RedisClient } = require("redis");
 
-const app = express();
 const blockchain = new BlockChain();
 const transactionPool = new TransactionPool();
 const wallet = new Wallet();
-
 const pubsub = new PubSub({ blockchain, transactionPool });
-
-
-
+const transactionMiner = new TransactionMiner({ blockchain, transactionPool, wallet, pubsub });
 
 const DEFAULT_PORT = 3000;
 const ROOT_NODE_ADDRESS = `http://localhost:${DEFAULT_PORT}`;
@@ -28,6 +26,7 @@ const ROOT_NODE_ADDRESS = `http://localhost:${DEFAULT_PORT}`;
 //     pubsub.broadcastChain()
 // }, 1000);
 
+const app = express();
 app.use(express.json());
 app.use(express.urlencoded({
     extended: true
@@ -40,9 +39,7 @@ app.get("/api/blocks", (req, res) => {
 
 app.post("/api/mine", (req, res) => {
     const { data } = req.body;
-
     blockchain.addBlock({ data });
-
     pubsub.broadcastChain();
 
     res.redirect("/api/blocks");
@@ -73,6 +70,12 @@ app.post('/api/transact', (req, res) => {
 app.get("/api/transaction-pool-map", (req, res) => {
     res.json(transactionPool.transactionMap);
 })
+
+app.get("/api/mine-transactions", (req, res) => {
+    transactionMiner.mineTransactions();
+
+    res.redirect("/api/blocks")
+});
 
 const syncWithRootState = () => {
     request({ url: `${ROOT_NODE_ADDRESS}/api/blocks` }, (error, response, body) => {
