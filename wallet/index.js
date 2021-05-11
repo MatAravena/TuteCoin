@@ -36,20 +36,29 @@ class Wallet {
     }
 
     static calculateBalance({ chain, address }) {
+        let hashConductedTransaction = false;
         let outputsTotal = 0;
 
-        for (let i = 1; i < chain.length; i++) {
+        for (let i = chain.length - 1; i > 0; i--) {
             const block = chain[i];
 
             for (let tran of block.data) {
+                if (tran.input.address === address) {
+                    hashConductedTransaction = true;
+                }
+
                 const addressOutPut = tran.outputMap[address];
-                outputsTotal += addressOutPut;
+
+                if (addressOutPut)
+                    outputsTotal += addressOutPut;
             }
+
+            if (hashConductedTransaction) break;
+
         }
 
-        return STARTING_BALANCE + outputsTotal;
+        return hashConductedTransaction ? outputsTotal : STARTING_BALANCE + outputsTotal;
     }
-
 }
 
 module.exports = Wallet;

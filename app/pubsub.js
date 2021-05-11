@@ -34,8 +34,6 @@ class PubSub {
                 this.blockchain.replaceChain(parsedMessage, true, () => {
                     this.transactionPool.clearBlockchainTransactions({
                         chain: parsedMessage
-
-
                     });
                 });
                 break;

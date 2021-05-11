@@ -73,12 +73,24 @@ app.post('/api/transact', (req, res) => {
 
 app.get("/api/transaction-pool-map", (req, res) => {
     res.json(transactionPool.transactionMap);
-})
+});
 
 app.get("/api/mine-transactions", (req, res) => {
     transactionMiner.mineTransactions();
 
     res.redirect("/api/blocks")
+});
+
+app.get("/api/wallet-info", (req, res) => {
+    const address = wallet.publicKey;
+
+    res.json({
+        address: address,
+        balance: Wallet.calculateBalance({
+            chain: blockchain.chain,
+            address: address
+        })
+    })
 });
 
 const syncWithRootState = () => {
