@@ -1,4 +1,6 @@
+//Native JS Module 
 const bodyParser = require("body-parser");
+const path = require('path');
 
 //ExpressJS
 const express = require('express');
@@ -32,6 +34,9 @@ app.use(express.urlencoded({
     extended: true
 }));
 app.use(bodyParser.json());
+
+//Let the js in the Client folder can be serv
+app.use(express.static(path.join(__dirname, "client/dist")));
 
 app.get("/api/blocks", (req, res) => {
     res.json(blockchain.chain);
@@ -91,6 +96,10 @@ app.get("/api/wallet-info", (req, res) => {
             address: address
         })
     })
+});
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'client/dist/index.html'));
 });
 
 const syncWithRootState = () => {
