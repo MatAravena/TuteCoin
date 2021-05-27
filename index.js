@@ -29,6 +29,7 @@ const ROOT_NODE_ADDRESS = `http://localhost:${DEFAULT_PORT}`;
 // }, 1000);
 
 const app = express();
+var cors = require('cors')
 app.use(express.json());
 app.use(express.urlencoded({
     extended: true
@@ -38,6 +39,19 @@ app.use(bodyParser.json());
 //Let the js in the Client folder can be serv
 app.use(express.static(path.join(__dirname, "client/dist")));
 
+//CORS
+app.use(cors());
+// SPECIFIC PORT
+// app.listen(1234, function () {
+//     console.log('CORS-enabled web server listening on port 80')
+// })
+// SPECIFIC URL
+// var corsOptions = {
+//     origin: 'http://localhost:1234/',
+//     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+// }
+
+//Http methods
 app.get("/api/blocks", (req, res) => {
     res.json(blockchain.chain);
 });
@@ -122,6 +136,51 @@ const syncWithRootState = () => {
         }
     });
 };
+
+
+
+// Tests
+const walletTutin = new Wallet();
+const walletBar = new Wallet();
+
+const generateWalletTransaction = ({ wallet, recipient, amount }) => {
+    const transaction = wallet.createTransaction({
+        amount,
+        recipient,
+        chain: blockchain.chain
+    });
+
+    transactionPool.setTransaction(transaction);
+}
+const walletAction = () => generateWalletTransaction({
+    wallet, recipient: walletTutin.publicKey, amount: 10
+});
+const walletTutinAction = () => generateWalletTransaction({
+    wallet: walletTutin, recipient: walletBar.publicKey, amount: 10
+});
+const walletBarAction = () => generateWalletTransaction({
+    wallet: walletBar, recipient: wallet.publicKey, amount: 5
+});
+
+for (let i = 0; i <= 10; i++) {
+    if (i % 3 == 0) {
+        walletAction();
+        walletTutinAction();
+    }
+    else if (i % 3 == 1) {
+        walletAction();
+        walletBarAction();
+    } else {
+        walletTutinAction();
+        walletAction();
+    }
+
+    transactionMiner.mineTransactions();
+}
+// TEST - END
+
+
+
 
 // Multi ports dinamyc
 let PEER_PORT;

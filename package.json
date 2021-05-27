@@ -11,7 +11,7 @@
     "start-redis": "redis-server --service-stop && redis-server --service-start",
     "build-client": "npm run clean parcel build client/src/index.html --out-dir client/dist",
     "dev-client": "npm run clean parcel client/src/index.html --out-dir client/dist",
-    "mi-dev-client": "     parcel client/src/index.html --out-dir client/dist",
+    "mi-dev-client": "parcel client/src/index.html --out-dir client/dist",
     "clean": "rmdir .cache client/dist"
   },
   "jest": {
@@ -21,12 +21,21 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.14.3",
+    "@babel/plugin-proposal-class-properties": "^7.2.3",
+    "@babel/preset-react": "^7.13.13",
     "cross-env": "^5.2.0",
-    "jest": "^23.6.0",
+    "jest": "^27.0.1",
     "nodemon": "^1.18.4"
   },
   "dependencies": {
+    "babel-core": "^7.0.0-beta.3",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
     "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
     "elliptic": "^6.4.1",
     "express": "^4.16.3",
     "hex-to-binary": "^1.0.1",
@@ -38,7 +47,7 @@
     "react-dom": "^16.6.0",
     "react-redux": "^7.2.4",
     "react-router-dom": "^4.3.1",
-    "redis": "^2.8.0",
+    "redis": "^3.1.2",
     "request": "^2.88.0",
     "uuid": "^3.3.2"
   }
