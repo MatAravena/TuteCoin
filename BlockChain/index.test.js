@@ -185,7 +185,7 @@ describe("BlockChain", () => {
             });
         });
 
-        describe("and the transaction has multiple rewards", () => {
+        describe("and the transaction data has multiple rewards", () => {
             it("returns false and logs and errors", () => {
 
                 newChain.addBlock({ data: [transaction, rewardTransaction, rewardTransaction] });

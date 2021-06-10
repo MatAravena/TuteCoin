@@ -18,14 +18,13 @@ class PubSub {
         this.subscribeToChannels();
 
         this.subscriber.on(
-            "message",
-            (channel, message) => {
-                this.handlerMessage(channel, message);
-            });
+            'message',
+            (channel, message) => this.handleMessage(channel, message)
+        );
     }
 
-    handlerMessage(channel, message) {
-        console.log(`Message recieved. Channel: ${channel}. Message:${message}`);
+    handleMessage(channel, message) {
+        console.log(`Message received. Channel: ${channel}. Message: ${message}.`);
 
         const parsedMessage = JSON.parse(message);
 
@@ -41,7 +40,7 @@ class PubSub {
                 this.transactionPool.setTransaction(parsedMessage);
                 break;
             default:
-                break;
+                return;
         }
     }
 
@@ -55,7 +54,7 @@ class PubSub {
     }
 
     publish({ channel, message }) {
-        this.publisher.unsubscribe(channel, () => {
+        this.subscriber.unsubscribe(channel, () => {
             this.publisher.publish(channel, message, () => {
                 this.subscriber.subscribe(channel);
             });

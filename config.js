@@ -1,5 +1,5 @@
 //const cryptoHash = require('./crypto-hash');
-const INITIAL_DIFFICULTY = 1;
+const INITIAL_DIFFICULTY = 3;
 const MINE_RATE = 1000;
 
 const GENESIS_DATA = {
@@ -8,7 +8,7 @@ const GENESIS_DATA = {
     hash: "hashPrimero",
     difficulty: INITIAL_DIFFICULTY,
     nonce: 0,
-    data: ["Primer Tute Coin !"]
+    data: []
 };
 
 const STARTING_BALANCE = 1000;

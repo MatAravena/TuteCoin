@@ -138,20 +138,24 @@ const syncWithRootState = () => {
 };
 
 
-
 // Tests
 const walletTutin = new Wallet();
 const walletBar = new Wallet();
 
 const generateWalletTransaction = ({ wallet, recipient, amount }) => {
     const transaction = wallet.createTransaction({
-        amount,
         recipient,
+        amount,
         chain: blockchain.chain
     });
 
     transactionPool.setTransaction(transaction);
 }
+
+
+const walletTutinPrimeroAction = () => generateWalletTransaction({
+    wallet: walletTutin, recipient: walletBar.publicKey, amount: 10
+});
 const walletAction = () => generateWalletTransaction({
     wallet, recipient: walletTutin.publicKey, amount: 10
 });
@@ -163,17 +167,22 @@ const walletBarAction = () => generateWalletTransaction({
 });
 
 for (let i = 0; i <= 10; i++) {
-    if (i % 3 == 0) {
-        walletAction();
-        walletTutinAction();
-    }
-    else if (i % 3 == 1) {
-        walletAction();
-        walletBarAction();
+    if (i == 0) {
+        walletTutinPrimeroAction();
     } else {
-        walletTutinAction();
-        walletAction();
+        if (i % 3 == 0) {
+            walletAction();
+            walletTutinAction();
+        }
+        else if (i % 3 == 1) {
+            walletAction();
+            walletBarAction();
+        } else {
+            walletTutinAction();
+            walletAction();
+        }
     }
+
 
     transactionMiner.mineTransactions();
 }

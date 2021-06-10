@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import logoA_small_icon_only from '../../assets/logoA_small.png'
-import Blocks from "./Blocks";
+import { Link } from "react-router-dom";
+import logo from '../../assets/logoA_small.png'
 
 class App extends Component {
 
@@ -9,7 +9,7 @@ class App extends Component {
     state = { walletInfo: {} };
 
     componentDidMount() {
-        fetch('http://localhost:3000/api/wallet-info')
+        fetch(`${document.location.origin}/api/wallet-info`)
             .then(response => response.json())
             .then(json => this.setState({ walletInfo: json }))
         // .then(json => console.log("json", json))
@@ -20,22 +20,23 @@ class App extends Component {
 
         return (
             <div className="App">
-                <img className="logo" src={logoA_small_icon_only} />
+                <img className="logo" src={logo} />
                 <div>
                     Welcome to the Tute blockchain.
                 </div>
                 <br />
-
+                <div><Link to="/blocks">Blocks</Link></div>
+                <div><Link to="/conduct-transaction">Conduct a Transaction</Link></div>
+                <div><Link to="/transaction-pool">Transaction Pool</Link></div>
+                <br />
                 <div className="WalletInfo">
                     <div>Adress: {address} </div>
                     <br />
                     <div>Balance: {balance} </div>
                 </div>
-
-                <br />
-                <Blocks />
             </div>
         );
     }
 }
+
 export default App;
